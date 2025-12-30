@@ -34,4 +34,20 @@ bash scripts/recorder.sh
 
 This will start capturing data using the sniffer and create a dataset that you can later analyze in Wireshark.
 
+#### Capturing on Multiple Channels
+Zigbee uses channels **11–26**. If you have multiple sniffer dongles connected, you can capture several channels in parallel:
+
+```bash
+# Example with two sniffers covering channels 15 and 20
+bash scripts/recorder.sh --interfaces cc2531,cc2531_1 --channels 15,20
+```
+
+To attempt capturing on every Zigbee channel, supply interfaces for each available dongle and let the script map them in order:
+
+```bash
+bash scripts/recorder.sh --interfaces cc2531,cc2531_1,cc2531_2,cc2531_3 --all-channels
+```
+
+If fewer interfaces are provided than channels requested, the script will start as many captures as there are dongles and warn about the remaining channels. Use `--channel-command "iwpan dev {iface} set channel 0 {channel}"` (or another command suited to your hardware) if your sniffer requires an explicit channel configuration before capture starts.
+
 By following these steps, you can successfully record and capture your own Zigbee network data using the TI CC2531 sniffer and Wireshark.
